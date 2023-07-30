@@ -1,18 +1,19 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App";
-import { BrowserRouter as Router } from "react-router-dom";
-import { ChakraBaseProvider } from "@chakra-ui/react";
+import { ColorModeScript } from '@chakra-ui/react';
+import React, { StrictMode } from 'react';
+import * as ReactDOM from 'react-dom/client';
+import App from './App';
+import { ChakraProvider, theme } from '@chakra-ui/react';
 
-export const server = "http://localhost:5000";
+const container = document.getElementById('root');
+const root = ReactDOM.createRoot(container);
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <Router>
-      <ChakraBaseProvider>
-        <App />
-      </ChakraBaseProvider>
-    </Router>
-  </React.StrictMode>
+  <StrictMode>
+    <ChakraProvider theme={theme}>
+      <ColorModeScript />
+      <App />
+    </ChakraProvider>
+  </StrictMode>
 );
+
+export const server = 'http://localhost:5000';

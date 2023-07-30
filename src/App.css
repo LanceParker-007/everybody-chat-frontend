@@ -4,4 +4,6 @@
   background-image: url("./assets/TokyoGhoul.jpg");
   background-size: cover;
   background-position: center;
+  justify-content: center;
+  color: black;
 }
