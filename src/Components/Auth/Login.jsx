@@ -11,6 +11,7 @@ import {
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useChatContext } from '../../Context/ChatProvider';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -19,6 +20,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
+  const { setUser } = useChatContext();
 
   const submitHandler = async e => {
     e.preventDefault();
@@ -56,8 +58,9 @@ const Login = () => {
         isClosable: true,
         position: 'top',
       });
-
-      console.log(data);
+      //Saving user in local storage
+      setUser(data);
+      localStorage.setItem('userInfo', JSON.stringify(data));
       setLoading(false);
       navigate('/chats');
     } catch (error) {

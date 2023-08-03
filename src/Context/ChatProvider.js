@@ -10,11 +10,12 @@ const ChatContextProvider = ({ children }) => {
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    setUser(userInfo);
-
-    //If user not logged in push it to "/" route
+    //If user not logged in push it to "/"
     if (!userInfo) {
       return navigate('/');
+    } else {
+      setUser(userInfo);
+      return navigate('/chats');
     }
   }, [navigate]);
 
