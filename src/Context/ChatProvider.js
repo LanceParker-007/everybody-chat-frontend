@@ -7,6 +7,8 @@ const ChatContextProvider = ({ children }) => {
   //state banate
   const navigate = useNavigate();
   const [user, setUser] = useState();
+  const [selectedChat, setSelectedChat] = useState();
+  const [chats, setChats] = useState();
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -25,6 +27,10 @@ const ChatContextProvider = ({ children }) => {
         //state pass kar dete
         user,
         setUser,
+        selectedChat,
+        setSelectedChat,
+        chats,
+        setChats,
       }}
     >
       {children}
