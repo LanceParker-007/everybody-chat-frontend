@@ -92,7 +92,52 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
   };
 
   //Remove user
-  const handleRemove = () => {};
+  const handleRemove = async user1 => {
+    if (selectedChat.groupAdmin._id !== user._id && user1._id !== user._id) {
+      toast({
+        title: 'Only admins are allowed!',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.put(
+        `/api/chat/groupremove`,
+        {
+          chatId: selectedChat._id,
+          userId: user1._id,
+        },
+        config
+      );
+
+      // if the user himself have left the group
+      user1._id === user._id ? setSelectedChat() : setSelectedChat(data);
+
+      setFetchAgain(!fetchAgain);
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: 'Error ocurred!',
+        description: error.reponse.data.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  };
 
   //Rename group name
   const handleRename = async () => {
@@ -194,7 +239,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain }) => {
                 <UserBadgeItem
                   key={u._id}
                   user={u}
-                  handleFunction={() => handleRemove}
+                  handleFunction={() => handleRemove(u)}
                 />
               ))}
             </Box>
