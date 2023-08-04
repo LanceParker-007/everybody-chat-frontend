@@ -4,41 +4,41 @@ import { Box, Button, Stack, Text, useToast } from '@chakra-ui/react';
 import axios from 'axios';
 import { AddIcon } from '@chakra-ui/icons';
 import ChatLoading from './ChatLoading.jsx';
-import { getSender } from '../src/chatLogics.js';
+import { getSender } from '../config/chatLogics.js';
 import GroupModalChat from './miscellaneous/GroupModalChat.jsx';
 
-const MyChats = () => {
+const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
   const toast = useToast();
   const { user, chats, setChats, selectedChat, setSelectedChat } =
     useChatContext();
 
-  const fetchChats = async () => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-
-      const { data } = await axios.get('/api/chat', config);
-      setChats(data);
-    } catch (error) {
-      toast({
-        title: 'Error occured',
-        description: 'Failed to fetch the chats',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'top-left',
-      });
-    }
-  };
-
+  //I updated it made my own changes
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
+    const fetchChats = async () => {
+      try {
+        const config = {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+
+        const { data } = await axios.get('/api/chat', config);
+        setChats(data);
+      } catch (error) {
+        toast({
+          title: 'Error occured',
+          description: 'Failed to fetch the chats',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+          position: 'top-left',
+        });
+      }
+    };
     fetchChats();
-  }, []);
+  }, [setChats, toast, user.token, fetchAgain]); //Why fetchAgain here
 
   return (
     <Box

@@ -29,6 +29,8 @@ const ProfileModal = ({ children }) => {
           display={{ base: 'flex' }}
           icon={<ViewIcon />}
           onClick={onOpen}
+          colorScheme="yellow"
+          variant={'solid'}
         />
       )}
       {/* Iske upar tak hamne dikhaya ki ye Profile model kya return karega */}
