@@ -60,6 +60,7 @@ const GroupModalChat = ({ children }) => {
         duration: 3000,
         isClosable: true,
       });
+      setLoading(false);
     }
   };
 
