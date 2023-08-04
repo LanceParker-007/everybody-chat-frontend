@@ -1,9 +1,21 @@
 .App {
   min-height: 100vh;
   display: flex;
-  background-image: url("./assets/TokyoGhoul.jpg");
+  background-image: url('./assets/TokyoGhoul.jpg');
   background-size: cover;
   background-position: center;
   justify-content: center;
   color: black;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(136, 136, 136, 0.281);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
