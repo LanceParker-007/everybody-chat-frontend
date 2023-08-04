@@ -86,7 +86,8 @@ const SideDrawer = () => {
   };
 
   // Access chat funtion
-  const accessChat = userId => {
+  const accessChat = async userId => {
+    console.log(userId);
     try {
       setLoadingChat(true);
       const config = {
@@ -96,7 +97,7 @@ const SideDrawer = () => {
         },
       };
 
-      const { data } = axios.post('/api/chat', { userId }, config);
+      const { data } = await axios.post('/api/chat', { userId }, config);
 
       //What is this doing
       if (!chats.find(c => c._id === data._id)) {
@@ -107,6 +108,7 @@ const SideDrawer = () => {
       setLoadingChat(false);
       onClose();
     } catch (error) {
+      setLoadingChat(false);
       toast({
         title: 'Error fetching the chat',
         description: error.message,
@@ -183,7 +185,6 @@ const SideDrawer = () => {
                 value={search}
                 onChange={e => {
                   setSearch(e.target.value);
-                  handleSearch();
                 }}
               />
               <Button onClick={handleSearch}>Go</Button>

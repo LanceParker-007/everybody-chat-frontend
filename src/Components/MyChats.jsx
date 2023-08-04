@@ -84,12 +84,12 @@ const MyChats = () => {
         overflowY={'hidden'}
       >
         {chats ? (
-          <Stack overflowY={'scroll'}>
+          <Stack>
             {chats.map(chat => (
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor={'pointer'}
-                bg={selectedChat === chat ? '38b2ac' : '#e8e8e8'}
+                bg={selectedChat === chat ? 'black' : '#e8e8e8'}
                 color={selectedChat === chat ? 'white' : 'black'}
                 px={3}
                 py={2}
