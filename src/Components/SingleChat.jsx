@@ -1,13 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useChatContext } from '../Context/ChatProvider';
-import { Box, IconButton, Text } from '@chakra-ui/react';
+import {
+  Box,
+  FormControl,
+  IconButton,
+  Input,
+  Spinner,
+  Text,
+} from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { getSender, getSenderFull } from '../config/chatLogics';
 import ProfileModal from './miscellaneous/ProfileModal';
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal';
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [newMessage, setNewMessage] = useState('');
+
   const { user, selectedChat, setSelectedChat } = useChatContext();
+
+  const sendMessage = () => {};
+
+  const typingHandler = () => {};
 
   return (
     <>
@@ -51,7 +66,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           <Box
             display={'flex'}
             flexDir={'column'}
-            justifyContent={'center'}
+            justifyContent={'flex-end'}
             p={3}
             bg={'#E8E8E8'}
             w={'100%'}
@@ -59,7 +74,42 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             borderRadius={'lg'}
             overflowY={'hidden'}
           >
-            {/* Messages here... */}
+            {/* All chat messages here... */}
+            {loading ? (
+              <Spinner
+                size={'xl'}
+                w={20}
+                h={20}
+                alignSelf={'center'}
+                margin={'auto'}
+                color="black"
+              />
+            ) : (
+              <div>{/* Messages */}</div>
+            )}
+            <FormControl onKeyDown={sendMessage} isRequired mt={3}>
+              <Input
+                variant={'filled'}
+                backgroundColor={'white'}
+                color={'black'}
+                placeholder="Enter a message..."
+                sx={{
+                  '::placeholder': {
+                    color: 'gray.400', // Specify the color of the placeholder text
+                  },
+                }}
+                _hover={{
+                  borderColor: 'blue.300', // Border color on hover
+                }}
+                onChange={typingHandler}
+                value={newMessage}
+                focusBorderColor="blue.500" // Specify the focus border color
+                _focus={{
+                  backgroundColor: 'white',
+                  boxShadow: 'outline', // Apply a focus ring when the input is focused
+                }}
+              />
+            </FormControl>
           </Box>
         </>
       ) : (
