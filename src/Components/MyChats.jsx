@@ -13,32 +13,33 @@ const MyChats = ({ fetchAgain }) => {
   const { user, chats, setChats, selectedChat, setSelectedChat } =
     useChatContext();
 
-  //I updated it made my own changes
+  const fetchChats = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.get('/api/chat', config);
+      setChats(data);
+    } catch (error) {
+      toast({
+        title: 'Error occured',
+        description: 'Failed to fetch the chats',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top-left',
+      });
+    }
+  };
+
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem('userInfo')));
-    const fetchChats = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        const { data } = await axios.get('/api/chat', config);
-        setChats(data);
-      } catch (error) {
-        toast({
-          title: 'Error occured',
-          description: 'Failed to fetch the chats',
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-          position: 'top-left',
-        });
-      }
-    };
     fetchChats();
-  }, [setChats, toast, user.token, fetchAgain]); //Why fetchAgain here
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchAgain]); //Why fetchAgain here
 
   return (
     <Box
@@ -101,7 +102,7 @@ const MyChats = ({ fetchAgain }) => {
                 key={chat._id}
               >
                 <Text>
-                  {!chat.isGroupChat
+                  {loggedUser && !chat.isGroupChat
                     ? getSender(loggedUser, chat.users)
                     : chat.chatName}
                 </Text>
