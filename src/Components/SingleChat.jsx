@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useChatContext } from '../Context/ChatProvider';
 import {
   Box,
@@ -14,6 +14,7 @@ import { getSender, getSenderFull } from '../config/chatLogics';
 import ProfileModal from './miscellaneous/ProfileModal';
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal';
 import axios from 'axios';
+import './styles.css';
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
@@ -57,6 +58,40 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   };
 
+  const fetchAllMessages = async () => {
+    if (!selectedChat) return;
+
+    try {
+      setLoading(true);
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+      const { data } = await axios.get(
+        `/api/message/${selectedChat._id}`,
+        config
+      );
+
+      console.log(messages);
+      setMessages(data);
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: 'Error occured when fetching the chat!',
+        description: 'Failed to fetch the chat!',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'top',
+      });
+    }
+  };
+
+  useEffect(() => {
+    fetchAllMessages();
+  }, [selectedChat]);
+
   const typingHandler = e => {
     setNewMessage(e.target.value);
 
@@ -97,6 +132,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <UpdateGroupChatModal
                   fetchAgain={fetchAgain}
                   setFetchAgain={setFetchAgain}
+                  fetchAllMessages={fetchAllMessages}
                 />
               </>
             )}
@@ -124,7 +160,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 color="black"
               />
             ) : (
-              <div>{/* Messages */}</div>
+              <div className="messages">{/* Messages */}</div>
             )}
             <FormControl onKeyDown={sendMessage} isRequired mt={3}>
               <Input
