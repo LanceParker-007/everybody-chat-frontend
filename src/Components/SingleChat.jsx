@@ -7,22 +7,61 @@ import {
   Input,
   Spinner,
   Text,
+  useToast,
 } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { getSender, getSenderFull } from '../config/chatLogics';
 import ProfileModal from './miscellaneous/ProfileModal';
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal';
+import axios from 'axios';
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState('');
+  const toast = useToast();
 
   const { user, selectedChat, setSelectedChat } = useChatContext();
 
-  const sendMessage = () => {};
+  const sendMessage = async event => {
+    if (event.key === 'Enter' && newMessage && newMessage.length !== 0) {
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
 
-  const typingHandler = () => {};
+        setNewMessage('');
+
+        const { data } = await axios.post(
+          '/api/message',
+          { content: newMessage, chatId: selectedChat._id },
+          config
+        );
+
+        console.log(data);
+
+        setMessages([...messages, newMessage]);
+      } catch (error) {
+        toast({
+          title: 'Error occured!',
+          description: 'Failed to send message',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+          position: 'top',
+        });
+      }
+    }
+  };
+
+  const typingHandler = e => {
+    setNewMessage(e.target.value);
+
+    //Typing indicator Logic
+  };
 
   return (
     <>
